@@ -1,22 +1,25 @@
 ; Загрузчик для MyOS
 ; Использует Multiboot 2 спецификацию
 
-section .multiboot_header
+; Multiboot 2 заголовок должен быть в первых 32KB файла
+; Используем отдельную секцию, которая будет размещена первой
+section .multiboot_header, alloc
 align 8
-header_start:
+multiboot_header:
     dd 0xe85250d6                ; Magic number (Multiboot 2)
-    dd 0                          ; Architecture 0 (i386)
-    dd header_end - header_start  ; Header length
-    dd 0x100000000 - (0xe85250d6 + 0 + (header_end - header_start)) ; Checksum
+    dd 0                          ; Architecture 0 (i386/x86-64)
+    dd multiboot_header_end - multiboot_header  ; Header length
+    dd 0x100000000 - (0xe85250d6 + 0 + (multiboot_header_end - multiboot_header)) ; Checksum
 
     ; End tag
     dw 0    ; type
     dw 0    ; flags
     dd 8    ; size
-header_end:
+multiboot_header_end:
 
 section .text
 bits 64
+
 global _start
 extern rust_main
 

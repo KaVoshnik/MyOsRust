@@ -1,31 +1,32 @@
 ENTRY(_start)
 
+/* Multiboot header должен быть в первых 32KB исполняемого файла */
 SECTIONS
 {
     . = 1M;
 
-    .boot :
-    {
-        *(.multiboot_header)
+    /* Заголовок Multiboot 2 - должен быть первым */
+    .multiboot_header : {
+        KEEP(*(.multiboot_header))
     }
 
-    .text :
-    {
+    /* Код */
+    .text : {
         *(.text)
     }
 
-    .rodata :
-    {
+    /* Только для чтения данные */
+    .rodata : {
         *(.rodata)
     }
 
-    .data :
-    {
+    /* Данные */
+    .data : {
         *(.data)
     }
 
-    .bss :
-    {
+    /* BSS */
+    .bss : {
         *(COMMON)
         *(.bss)
     }
