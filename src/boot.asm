@@ -16,12 +16,13 @@ header_start:
 header_end:
 
 section .text
+bits 64
 global _start
 extern rust_main
 
 _start:
-    ; Настройка стека
-    mov esp, stack_top
+    ; Настройка стека (64-битный режим)
+    lea rsp, [stack_top]
     
     ; Вызов Rust кода
     call rust_main

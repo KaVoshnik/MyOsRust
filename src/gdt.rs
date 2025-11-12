@@ -77,7 +77,7 @@ pub fn init() {
 
         let gdt_ptr = GdtPtr {
             limit: (core::mem::size_of::<Gdt>() - 1) as u16,
-            base: &GDT as *const _ as u64,
+            base: &raw const GDT as *const _ as u64,
         };
 
         // Загрузка GDT

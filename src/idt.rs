@@ -4,6 +4,7 @@ use core::arch::asm;
 
 /// Типы шлюзов прерываний
 #[repr(u8)]
+#[allow(dead_code)]
 enum GateType {
     Interrupt = 0x8E,
     Trap = 0x8F,
@@ -85,7 +86,7 @@ pub fn init() {
         // Загрузка IDT
         let idt_ptr = IdtPtr {
             limit: (core::mem::size_of::<IdtEntry>() * IDT_SIZE - 1) as u16,
-            base: IDT.as_ptr() as u64,
+            base: &raw const IDT as *const _ as u64,
         };
 
         asm!("lidt [{0}]", in(reg) &idt_ptr, options(nostack));

@@ -1,6 +1,7 @@
 ; Ассемблерные обёртки для обработчиков прерываний
 
 section .text
+bits 64
 
 ; Макрос для создания обработчика исключения без кода ошибки
 %macro exception_handler_no_error 1
@@ -48,8 +49,14 @@ exception_common:
     push r15
 
     ; Вызов Rust обработчика
-    mov rdi, [rsp + 120]  ; Номер вектора
-    mov rsi, [rsp + 128]  ; Код ошибки
+    ; После push всех регистров (15 * 8 = 120 байт) в стеке:
+    ; [rsp + 0] = r15 (последний push)
+    ; ...
+    ; [rsp + 112] = rax (первый push)
+    ; [rsp + 120] = код ошибки (8 байт)
+    ; [rsp + 128] = номер вектора (8 байт)
+    mov rdi, [rsp + 128]  ; Номер вектора
+    mov rsi, [rsp + 120]  ; Код ошибки
     extern exception_handler_wrapper
     call exception_handler_wrapper
 
@@ -93,7 +100,13 @@ interrupt_common:
     push r15
 
     ; Вызов Rust обработчика
-    mov rdi, [rsp + 120]  ; Номер вектора
+    ; После push всех регистров (15 * 8 = 120 байт) в стеке:
+    ; [rsp + 0] = r15 (последний push)
+    ; ...
+    ; [rsp + 112] = rax (первый push)
+    ; [rsp + 120] = код ошибки (8 байт, всегда 0 для прерываний)
+    ; [rsp + 128] = номер вектора (8 байт)
+    mov rdi, [rsp + 128]  ; Номер вектора
     extern interrupt_handler_wrapper
     call interrupt_handler_wrapper
 

@@ -8,15 +8,22 @@ const PIC2_COMMAND: u16 = 0xA0;
 const PIC2_DATA: u16 = 0xA1;
 
 const ICW1_ICW4: u8 = 0x01;
+#[allow(dead_code)]
 const ICW1_SINGLE: u8 = 0x02;
+#[allow(dead_code)]
 const ICW1_INTERVAL4: u8 = 0x04;
+#[allow(dead_code)]
 const ICW1_LEVEL: u8 = 0x08;
 const ICW1_INIT: u8 = 0x10;
 
 const ICW4_8086: u8 = 0x01;
+#[allow(dead_code)]
 const ICW4_AUTO: u8 = 0x02;
+#[allow(dead_code)]
 const ICW4_BUF_SLAVE: u8 = 0x08;
+#[allow(dead_code)]
 const ICW4_BUF_MASTER: u8 = 0x0C;
+#[allow(dead_code)]
 const ICW4_SFNM: u8 = 0x10;
 
 /// Инициализация PIC
