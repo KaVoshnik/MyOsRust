@@ -1,0 +1,25 @@
+# Rust
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# Объектные файлы
+*.o
+*.obj
+
+# Бинарные файлы
+*.bin
+*.img
+*.iso
+
+# Временные файлы
+*.tmp
+*.bak
+*~
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
