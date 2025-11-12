@@ -22,7 +22,8 @@ extern rust_main
 
 _start:
     ; Настройка стека (64-битный режим)
-    lea rsp, [stack_top]
+    ; Используем RIP-relative адресацию для избежания проблем с релокацией
+    lea rsp, [rel stack_top]
     
     ; Вызов Rust кода
     call rust_main
@@ -38,4 +39,7 @@ align 16
 stack_bottom:
     resb 16384 ; 16 KB стек
 stack_top:
+
+; Экспортируем символ стека для использования в Rust
+global stack_top
 
