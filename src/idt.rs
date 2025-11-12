@@ -11,6 +11,7 @@ enum GateType {
 
 /// Структура дескриптора прерывания
 #[repr(C, packed)]
+#[derive(Copy, Clone)]
 struct IdtEntry {
     offset_low: u16,
     selector: u16,

@@ -34,7 +34,7 @@ pub enum Color {
 struct ColorCode(u8);
 
 impl ColorCode {
-    fn new(foreground: Color, background: Color) -> ColorCode {
+    const fn new(foreground: Color, background: Color) -> ColorCode {
         ColorCode((background as u8) << 4 | (foreground as u8))
     }
 }
@@ -77,12 +77,10 @@ impl Writer {
                 let col = self.column_position;
 
                 let color_code = self.color_code;
-                unsafe {
-                    self.buffer.chars[row][col] = ScreenChar {
-                        ascii_character: byte,
-                        color_code,
-                    };
-                }
+                self.buffer.chars[row][col] = ScreenChar {
+                    ascii_character: byte,
+                    color_code,
+                };
                 self.column_position += 1;
             }
         }
@@ -93,9 +91,7 @@ impl Writer {
         for row in 1..BUFFER_HEIGHT {
             for col in 0..BUFFER_WIDTH {
                 let character = self.buffer.chars[row][col];
-                unsafe {
-                    self.buffer.chars[row - 1][col] = character;
-                }
+                self.buffer.chars[row - 1][col] = character;
             }
         }
         self.clear_row(BUFFER_HEIGHT - 1);
@@ -108,9 +104,7 @@ impl Writer {
             color_code: self.color_code,
         };
         for col in 0..BUFFER_WIDTH {
-            unsafe {
-                self.buffer.chars[row][col] = blank;
-            }
+            self.buffer.chars[row][col] = blank;
         }
     }
 
