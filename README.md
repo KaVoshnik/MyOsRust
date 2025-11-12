@@ -35,6 +35,12 @@ rustup component add rust-src --toolchain nightly
 - **Linux**: `sudo apt install qemu-system-x86` или `sudo yum install qemu-system-x86`
 - **macOS**: `brew install qemu`
 
+### GRUB (для создания ISO образа):
+
+- **Windows**: `choco install grub` или используйте WSL
+- **Linux**: `sudo apt install grub-pc-bin` или `sudo yum install grub2-tools`
+- **macOS**: `brew install grub` (может потребоваться дополнительная настройка)
+
 ### LLVM tools (для линковки):
 
 - **Windows**: Обычно включены в Rust установку
@@ -55,12 +61,15 @@ make build
 cargo build --target x86_64-unknown-none
 ```
 
-После сборки нужно создать загрузочный образ. Для этого можно использовать `bootimage`:
+После сборки нужно создать загрузочный ISO образ. Используйте Makefile:
 
 ```bash
-cargo install bootimage
-cargo bootimage --target x86_64-unknown-none
+make iso
 ```
+
+Это создаст `myos.iso` файл, который можно загрузить в QEMU или записать на диск.
+
+**Примечание:** Для создания ISO образа требуется `grub-mkrescue` (часть пакета GRUB).
 
 ## Запуск
 
@@ -73,7 +82,17 @@ make run
 ### Вариант 2: Используя QEMU напрямую
 
 ```bash
-qemu-system-x86_64 -drive format=raw,file=target/x86_64-unknown-none/debug/bootimage-myos.bin
+# Сначала создайте ISO образ
+make iso
+
+# Затем запустите
+qemu-system-x86_64 -cdrom myos.iso
+```
+
+### Запуск с отладкой (вывод в консоль)
+
+```bash
+make debug
 ```
 
 ## Структура проекта
