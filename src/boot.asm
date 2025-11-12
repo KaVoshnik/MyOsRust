@@ -1,9 +1,11 @@
 ; Загрузчик для MyOS
 ; Использует Multiboot 2 спецификацию
 
+section .text
+bits 64
+
 ; Multiboot 2 заголовок должен быть в первых 32KB файла
-; Используем отдельную секцию, которая будет размещена первой
-section .multiboot_header, alloc
+; Размещаем его в самом начале .text секции
 align 8
 multiboot_header:
     dd 0xe85250d6                ; Magic number (Multiboot 2)
@@ -16,9 +18,6 @@ multiboot_header:
     dw 0    ; flags
     dd 8    ; size
 multiboot_header_end:
-
-section .text
-bits 64
 
 global _start
 extern rust_main

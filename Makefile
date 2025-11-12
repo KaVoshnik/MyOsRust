@@ -27,6 +27,18 @@ build kernel:
 # Создание загрузочного ISO образа
 iso: kernel
 	@mkdir -p $(GRUB_DIR)
+	@echo "Проверка наличия Multiboot header в первых 32KB..."
+	@if hexdump -C target/$(RUST_TARGET)/debug/myos | head -100 | grep -q "d6 50 52 e8"; then \
+		echo "✓ Multiboot header найден в первых 32KB"; \
+	else \
+		echo "⚠ Multiboot header не найден в первых 32KB"; \
+		echo "Поиск заголовка в файле..."; \
+		if hexdump -C target/$(RUST_TARGET)/debug/myos | grep -q "d6 50 52 e8"; then \
+			echo "Заголовок найден, но не в первых 32KB"; \
+		else \
+			echo "Заголовок не найден в файле"; \
+		fi; \
+	fi
 	@cp target/$(RUST_TARGET)/debug/myos $(BOOT_DIR)/kernel.bin
 	@echo 'set timeout=0' > $(GRUB_DIR)/grub.cfg
 	@echo 'set default=0' >> $(GRUB_DIR)/grub.cfg

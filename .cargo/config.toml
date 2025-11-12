@@ -3,7 +3,7 @@ target = "x86_64-unknown-none"
 
 [target.x86_64-unknown-none]
 runner = "qemu-system-x86_64 -drive format=raw,file=target/x86_64-unknown-none/debug/bootimage-myos.bin"
-rustflags = ["-C", "link-arg=-Tlinker.ld"]
+rustflags = ["-C", "link-arg=-Tlinker.ld", "-C", "link-arg=--nmagic"]
 
 [unstable]
 build-std = ["core", "compiler_builtins"]
