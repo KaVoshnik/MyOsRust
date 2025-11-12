@@ -5,6 +5,9 @@
 use core::fmt;
 use spin::Mutex;
 
+// Используем OnceLock для ленивой инициализации
+use core::sync::OnceLock;
+
 pub const BUFFER_HEIGHT: usize = 25;
 pub const BUFFER_WIDTH: usize = 80;
 
@@ -137,11 +140,27 @@ impl fmt::Write for Writer {
 }
 
 // Глобальный writer для вывода
-pub static WRITER: Mutex<Writer> = Mutex::new(Writer {
-    column_position: 0,
-    color_code: ColorCode::new(Color::LightGreen, Color::Black),
-    buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
-});
+static WRITER_INIT: OnceLock<Mutex<Writer>> = OnceLock::new();
+
+fn get_writer() -> &'static Mutex<Writer> {
+    WRITER_INIT.get_or_init(|| {
+        Mutex::new(Writer {
+            column_position: 0,
+            color_code: ColorCode::new(Color::LightGreen, Color::Black),
+            buffer: unsafe { &mut *(0xb8000 as *mut Buffer) },
+        })
+    })
+}
+
+pub static WRITER: WriterRef = WriterRef;
+
+pub struct WriterRef;
+
+impl WriterRef {
+    pub fn lock(&self) -> spin::MutexGuard<'_, Writer> {
+        get_writer().lock()
+    }
+}
 
 #[macro_export]
 macro_rules! print {

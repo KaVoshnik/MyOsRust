@@ -12,6 +12,7 @@
 ## Установка зависимостей
 
 ### Rust компоненты:
+
 ```bash
 # Установка nightly версии Rust
 rustup toolchain install nightly
@@ -23,16 +24,19 @@ rustup component add rust-src --toolchain nightly
 ```
 
 ### NASM:
+
 - **Windows**: `choco install nasm` или скачать с https://www.nasm.us/
 - **Linux**: `sudo apt install nasm` или `sudo yum install nasm`
 - **macOS**: `brew install nasm`
 
 ### QEMU:
+
 - **Windows**: `choco install qemu`
 - **Linux**: `sudo apt install qemu-system-x86` или `sudo yum install qemu-system-x86`
 - **macOS**: `brew install qemu`
 
 ### LLVM tools (для линковки):
+
 - **Windows**: Обычно включены в Rust установку
 - **Linux**: `sudo apt install llvm` или `sudo yum install llvm`
 - **macOS**: `brew install llvm`
@@ -40,11 +44,13 @@ rustup component add rust-src --toolchain nightly
 ## Сборка
 
 ### Вариант 1: Используя Makefile
+
 ```bash
 make build
 ```
 
 ### Вариант 2: Используя Cargo напрямую
+
 ```bash
 cargo build --target x86_64-unknown-none
 ```
@@ -59,11 +65,13 @@ cargo bootimage --target x86_64-unknown-none
 ## Запуск
 
 ### Вариант 1: Используя Makefile
+
 ```bash
 make run
 ```
 
 ### Вариант 2: Используя QEMU напрямую
+
 ```bash
 qemu-system-x86_64 -drive format=raw,file=target/x86_64-unknown-none/debug/bootimage-myos.bin
 ```
@@ -122,4 +130,3 @@ MyOs/
 - [Writing an OS in Rust](https://os.phil-opp.com/) - Отличный учебник по написанию ОС на Rust
 - [Multiboot Specification](https://www.gnu.org/software/grub/manual/multiboot2/multiboot.html) - Спецификация Multiboot 2
 - [OSDev Wiki](https://wiki.osdev.org/) - Вики по разработке ОС
-
